@@ -8,4 +8,5 @@
 *.swp
 *.swo
 node_modules/
+db/
 npm-debug.log
