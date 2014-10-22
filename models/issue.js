@@ -20,12 +20,12 @@ issueSchema.methods.validateLabel = function(label) {
     var elementIndex = _.indexOf(otherLabels, element);
     return elementIndex < labelIndex;
   });
-  console.log("splitted labels: "+splittedLabels);  
+  console.log("splitted labels first: "+_.first(splittedLabels));  
 }
 
 issueSchema.methods.processRemoteLabels = function(labels) {
   var filtered = filterRemoteLabels(labels);
-  if (validateLabel(_.last(filtered)) {
+  if (this.validateLabel(_.last(filtered))) {
   }
 }
 

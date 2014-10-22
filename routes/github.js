@@ -19,9 +19,8 @@ router.post('/webhooks', function(req, res) {
     }
     if (issue) {
       console.log("issue found: "+issue+"\n");
-      
 
-      issue.validateLabel(filteredLabels.last);
+      issue.processRemoteLabels(labels);
     }
     else {
       console.log("did not find issue with id: "+githubIssue.id);
