@@ -4,8 +4,12 @@ var Issue = require('../models/issue.js');
 
 router.post('/webhooks', function(req, res) {
   
+  var labels = req.body.issue.labels;
+  var filteredLabels = Issue.filterRemoteLabels(labels);
+
   console.log("issue action: "+req.body.action+"\n"+
-    "labels: "+JSON.stringify(req.body.issue.labels));
+    "labels: "+JSON.stringify(labels)+"\n"+
+    "filtered labels: "+filteredLabels.length);
   
   var githubIssue = req.body.issue;
 
@@ -14,7 +18,10 @@ router.post('/webhooks', function(req, res) {
       res.send(500, "Database error");
     }
     if (issue) {
-      console.log("issue found: "+issue);
+      console.log("issue found: "+issue+"\n");
+      
+
+      issue.validateLabel(filteredLabels.last);
     }
     else {
       console.log("did not find issue with id: "+githubIssue.id);
