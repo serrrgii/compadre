@@ -13,7 +13,7 @@ var issueSchema = new Schema({
 })
 
 issueSchema.statics.validateAction = function(action) {
-  return _.contains(_.values(VALID_ACTIONS), action);	
+  return _.contains(_.values(ACTIONS), action);	
 }
 
 issueSchema.methods.validateLabel = function(label, action) {
@@ -37,7 +37,12 @@ issueSchema.methods.processRemoteLabels = function(labels, action) {
   var filtered = filterRemoteLabels(labels);
   var label = _.last(filtered);
   if (this.validateLabel(label, action)) {
-    this.labels.push({ name: label, date: new Date()});
+    if (action == ACTIONS.LABELED) {
+      this.labels.push({ name: label, date: new Date()});
+    }
+    else if (action == ACTIONS.UNLABELED) {
+      this.labels.pop();
+    }
     this.save(function(error) {
       if (error) {
         return console.log("error saving issue: "+error);
@@ -55,7 +60,7 @@ var filterRemoteLabels = function(labels) {
 	_.pluck(labels, 'name'));
 }
 
-var validateInsertLabel = function(labels, currentLabels) {
+var validateInsertLabel = function(label, currentLabels) {
   var labelIndex = _.indexOf(VALID_LABELS, label);
   var splittedLabels = _.partition(VALID_LABELS, function(element) {
 
