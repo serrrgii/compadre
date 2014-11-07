@@ -6,7 +6,7 @@ var LABELED_ACTION = "labeled";
 
 router.post('/webhooks', function(req, res) {
   
-  if (req.body.action !== LABELED_ACTION) {
+  if (Issue.validateAction(req.body.action) === false) {
     return res.send(422, "Unable to process this action");
   }  
 

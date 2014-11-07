@@ -2,12 +2,18 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   _ = require("underscore");
 
-var VALID_LABELS = ["next", "development", "done", "ready"];
+var VALID_LABELS = ["next", "development", "test", "ready"];
+var REVERTIBLE = ["test"];
+var VALID_ACTIONS = ["labeled", "unlabeled"];
 
 var issueSchema = new Schema({
   issueId: Number,
   labels : [{ name: String, date: Date }]
-});
+
+issueSchema.statics.validateAction = function(action) {
+  return _.contains(VALID_ACTIONS, action);	
+}
+
 issueSchema.methods.validateLabel = function(label) {
   if (_.contains(VALID_LABELS, label) === false) {
 	  return false;
